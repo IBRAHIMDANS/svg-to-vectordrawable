@@ -7,7 +7,7 @@ export default defineConfig([
         format: ['esm', 'cjs'],
         dts: true,
         clean: true,
-        sourcemap: true,
+        sourcemap: false,
         target: 'node18',
     },
     // Browser build: same API, but svgo resolves to its browser bundle (no Node built-ins).
@@ -16,7 +16,7 @@ export default defineConfig([
         format: ['esm', 'iife'],
         globalName: 'svgvd',
         dts: false,
-        sourcemap: true,
+        sourcemap: false,
         platform: 'browser',
         esbuildOptions(o) {
             o.alias = { ...(o.alias ?? {}), svgo: 'svgo/browser' };
