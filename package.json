@@ -1,0 +1,68 @@
+{
+    "name": "svg-vectordrawable",
+    "version": "0.1.0",
+    "description": "Convert SVG to Android VectorDrawable XML. AST-based (via svgo), with gradients (incl. gradientTransform), clip-path, groups and full CSS color support. Fails loud on constructs a VectorDrawable cannot represent.",
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        },
+        "./browser": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/browser.js"
+        }
+    },
+    "bin": {
+        "svgvd": "./dist/cli.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "sideEffects": false,
+    "scripts": {
+        "build": "tsup",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "validate:aapt2": "node scripts/aapt2-validate.mjs",
+        "prepublishOnly": "npm run build",
+        "release": "npm publish --provenance --access public"
+    },
+    "keywords": [
+        "svg",
+        "android",
+        "vectordrawable",
+        "vector-drawable",
+        "gradient",
+        "gradientTransform",
+        "figma",
+        "converter",
+        "svgo"
+    ],
+    "license": "MIT",
+    "engines": {
+        "node": ">=18"
+    },
+    "dependencies": {
+        "svgo": "^4.0.1"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.0.0",
+        "@types/node": "^20.14.0",
+        "@vitest/coverage-v8": "^2.1.0",
+        "eslint": "^9.0.0",
+        "globals": "^14.0.0",
+        "prettier": "^3.0.0",
+        "tsup": "^8.3.0",
+        "typescript": "^5.6.0",
+        "typescript-eslint": "^8.0.0",
+        "vitest": "^2.1.0"
+    }
+}
