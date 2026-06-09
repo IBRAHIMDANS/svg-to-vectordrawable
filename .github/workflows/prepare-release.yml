@@ -1,0 +1,63 @@
+name: Prepare Release
+
+on:
+    workflow_dispatch:
+        inputs:
+            version:
+                description: 'Version à releaser (ex: 0.2.0)'
+                required: true
+                type: string
+
+jobs:
+    prepare:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+        steps:
+            # GH_PAT (not the default GITHUB_TOKEN) so the pushed tag triggers release.yml.
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  token: ${{ secrets.GH_PAT }}
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: npm
+
+            - name: Bump version in package.json
+              env:
+                  VERSION: ${{ inputs.version }}
+              run: npm version "${VERSION}" --no-git-tag-version
+
+            - name: Patch CHANGELOG (Unreleased → version)
+              env:
+                  VERSION: ${{ inputs.version }}
+              run: |
+                  DATE=$(date +%Y-%m-%d)
+                  sed -i "s/^## \[Unreleased\]/## [Unreleased]\n\n## [${VERSION}] - ${DATE}/" CHANGELOG.md
+
+            - name: Create release branch, commit, tag and push
+              env:
+                  VERSION: ${{ inputs.version }}
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git checkout -b "release/v${VERSION}"
+                  git add package.json package-lock.json CHANGELOG.md
+                  git commit -m "chore(release): bump version to ${VERSION}"
+                  git tag "v${VERSION}"
+                  git push origin "release/v${VERSION}"
+                  git push origin "v${VERSION}"
+
+            - name: Open PR into main
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  VERSION: ${{ inputs.version }}
+              run: |
+                  gh pr create \
+                    --title "chore(release): bump version to ${VERSION}" \
+                    --body "Préparation automatique de la release v${VERSION}. Le tag pousse déjà la publication npm ; merger pour intégrer le bump dans main." \
+                    --base main \
+                    --head "release/v${VERSION}"
