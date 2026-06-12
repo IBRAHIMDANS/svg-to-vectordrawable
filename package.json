@@ -47,6 +47,15 @@
         "svgo"
     ],
     "license": "MIT",
+    "author": "Ibrahima Dansoko <ibrahimdansoko@gmail.com>",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/IBRAHIMDANS/svg-to-vectordrawable.git"
+    },
+    "homepage": "https://github.com/IBRAHIMDANS/svg-to-vectordrawable#readme",
+    "bugs": {
+        "url": "https://github.com/IBRAHIMDANS/svg-to-vectordrawable/issues"
+    },
     "engines": {
         "node": ">=18"
     },

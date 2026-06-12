@@ -17,13 +17,15 @@ jobs:
                   node-version: 20
                   cache: npm
                   registry-url: https://registry.npmjs.org
+            # Trusted Publishing (OIDC) requires npm >= 11.5.1; setup-node ships an older npm.
+            - run: npm install -g npm@latest
             - run: npm ci
             - run: npm run typecheck
             - run: npm run lint
             - run: npm run test
-            - run: npm publish --provenance --access public
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            # No NODE_AUTH_TOKEN: auth happens via OIDC (Trusted Publisher on npmjs.com).
+            # Provenance is generated automatically when publishing through a trusted publisher.
+            - run: npm publish --access public
 
             - name: Extract release notes from CHANGELOG.md
               id: changelog
