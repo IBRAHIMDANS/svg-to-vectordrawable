@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1]
+
+### Changed
+
+- Add `repository`, `homepage`, `bugs` and `author` metadata so npm links back to the GitHub repository.
+- Switch the npm release workflow to OIDC Trusted Publishing (no long-lived `NPM_TOKEN`); provenance is generated automatically.
+
 ## [0.1.0]
 
 ### Added
